@@ -1,0 +1,28 @@
+name: build-static
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ba53229
+
+      - name: Install musl
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      - name: Build
+        run: make CC=musl-gcc LDFLAGS=-static
+
+      - name: Check
+        run: |
+          file ciadpi
+          ./ciadpi --help | grep -E "^\s*-S" || echo "ОПЦИЯ -S НЕ НАЙДЕНА"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ciadpi-x86_64-static
+          path: ciadpi
