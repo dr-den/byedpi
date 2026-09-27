@@ -9,7 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ba53229
+          fetch-depth: 0
+
+      - name: Checkout commit
+        run: git checkout ba53229
 
       - name: Install musl
         run: sudo apt-get update && sudo apt-get install -y musl-tools
